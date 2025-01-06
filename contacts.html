@@ -1,22 +1,97 @@
-<script>
-  const jobs = [
-    { title: "Store Keeper", location: "dewas", education: "matric", contact: "1234567890" },
-    { title: "Receptionist", location: "ujjain", education: "graduate", contact: "9876543210" },
-    { title: "Cook", location: "dewas", education: "postgraduate", contact: "1122334455" }
-  ];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Contacts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
 
-  const params = new URLSearchParams(window.location.search);
-  const district = params.get("district") || "all";
-  const education = params.get("education") || "all";
+    .header {
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
 
-  const resultsDiv = document.getElementById("job-results");
-  let html = "";
+    .container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-  jobs.forEach(job => {
-    if ((district === "all" || job.location === district) &&
-        (education === "all" || job.education === education)) {
-      html += `
-        <div class="job-card">
+    .job-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-details h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .job-details p {
+      margin: 5px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .job-actions img {
+      width: 30px;
+      height: 30px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Contact Users</div>
+  <div class="container" id="job-results">
+    <!-- Dynamic job cards will be added here -->
+  </div>
+
+  <script>
+    // Mock job data
+    const jobs = [
+      { title: "Store Keeper", location: "dewas", education: "matric", contact: "1234567890" },
+      { title: "Receptionist", location: "ujjain", education: "graduate", contact: "9876543210" },
+      { title: "Cook", location: "dewas", education: "postgraduate", contact: "1122334455" }
+    ];
+
+    // Extract query parameters
+    const params = new URLSearchParams(window.location.search);
+    const district = params.get("district");
+    const education = params.get("education");
+
+    const resultsDiv = document.getElementById("job-results");
+
+    // Filter jobs based on parameters
+    const filteredJobs = jobs.filter(job => {
+      return (district === "all" || job.location === district) &&
+             (education === "all" || job.education === education);
+    });
+
+    // Display filtered jobs
+    if (filteredJobs.length > 0) {
+      filteredJobs.forEach(job => {
+        const jobCard = document.createElement("div");
+        jobCard.classList.add("job-card");
+        jobCard.innerHTML = `
           <div class="job-details">
             <h3>${job.title}</h3>
             <p>Location: ${job.location.toUpperCase()}</p>
@@ -30,9 +105,12 @@
               <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
             </a>
           </div>
-        </div>`;
+        `;
+        resultsDiv.appendChild(jobCard);
+      });
+    } else {
+      resultsDiv.innerHTML = "<p>No jobs found!</p>";
     }
-  });
-
-  resultsDiv.innerHTML = html || "<p>No jobs found!</p>";
-</script>
+  </script>
+</body>
+</html>
